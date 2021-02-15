@@ -1,43 +1,88 @@
 package com.hemebiotech.analytics;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
+
+import java.io.*;
+import java.util.*;
+
+
+/**
+* Modifications :
+ * @author Julien
+ * 28/01/2021 - @author
+ * Added "highPressureCount" as a method of test, following the given indications in the mail from Caroline
+ * Removed unhelpful comments (declarations)
+ *
+ * 01/02/2021 - @author
+ * Commented count by reader, added Map String interface
+*/
 
 public class AnalyticsCounter {
-	private static int headacheCount = 0;	// initialize to 0
-	private static int rashCount = 0;		// initialize to 0
-	private static int pupilCount = 0;		// initialize to 0
-	
-	public static void main(String args[]) throws Exception {
+	public static void main(String[] args) throws Exception {
+		HashMap<String, Integer> symptomsFrequency = AnalyticsCounter.countFrequency("Project02Eclipse/symptoms.txt");
+		TreeMap<String, Integer> sortedSymptoms = SortingSymptoms.sortSymptoms(symptomsFrequency);
+
+
+		System.out.println(Arrays.asList(symptomsFrequency));
+		SymptomsWriter symptomsWriter = new SymptomsWriter(sortedSymptoms);
+
+	}
+
+	public static HashMap<String, Integer> countFrequency(String filename) throws Exception {
 		// first get input
-		BufferedReader reader = new BufferedReader (new FileReader("symptoms.txt"));
-		String line = reader.readLine();
+		BufferedReader reader = new BufferedReader(new FileReader(filename));
+		String line;
 
-		int i = 0;	// set i to 0
-		int headCount = 0;	// counts headaches
-		while (line != null) {
-			i++;	// increment i
-			System.out.println("symptom from file: " + line);
-			if (line.equals("headache")) {
-				headCount++;
-				System.out.println("number of headaches: " + headCount);
-			}
-			else if (line.equals("rush")) {
-				rashCount++;
-			}
-			else if (line.contains("pupils")) {
-				pupilCount++;
-			}
+		int i = 0;
 
-			line = reader.readLine();	// get another symptom
+		ArrayList<String> symptoms = new ArrayList<>();
+		/* On s'assure avec une hashmap que la clé est unique */
+		HashMap<String, Integer> symptomsFrequency = new HashMap<>();
+
+
+		while ((line = reader.readLine()) != null) {
+			boolean symptomsExists = symptomsFrequency.containsKey(line);
+			System.out.println(symptomsExists);
+			if (symptomsExists) {
+				int nbOccurrence = symptomsFrequency.get(line);
+				nbOccurrence = nbOccurrence + 1;
+				symptomsFrequency.put(line, nbOccurrence);
+			} else {
+				symptomsFrequency.put(line, 1);
+			}
 		}
-		
-		// next generate output
-		FileWriter writer = new FileWriter ("result.out");
-		writer.write("headache: " + headacheCount + "\n");
-		writer.write("rash: " + rashCount + "\n");
-		writer.write("dialated pupils: " + pupilCount + "\n");
-		writer.close();
+
+
+//		for (HashMap.Entry<String, Integer> entry : symptomsFrequency.entrySet()) {
+//			ResultWriter symptomsWriter = new ResultWriter(symptomsFrequency);
+//			symptomsWriter. ;
+
+		return symptomsFrequency;
 	}
 }
+
+
+		// 		pourchaque ($lignes as $ligne) {
+//  	si ($sortie[$ligne] existe pas donc $sortie[$ligne] = 1
+//  	sinon $sortie[$ligne]++;
+
+
+//			int headCount = 0;
+//
+//		int rashCount = 0;
+//		int pupilCount = 0;
+//		int highPressureCount = 0;
+
+//		while (line != null) {
+//			i++;
+//			System.out.println("symptom from file: " + line);
+
+
+		// next generate output
+
+
+
+
+
+
+
+
