@@ -1,83 +1,64 @@
 package com.hemebiotech.analytics;
 
 
-import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.TreeMap;
 
 
 /**
 * Modifications :
- * @author Julien
+ * @author = Julien
  * 28/01/2021 - @author
  * Added "highPressureCount" as a method of test, following the given indications in the mail from Caroline
  * Removed unhelpful comments (declarations)
  *
  * 01/02/2021 - @author
  * Commented count by reader, added Map String interface
+ *
 */
+
 
 public class AnalyticsCounter {
 	public static void main(String[] args) throws Exception {
-		HashMap<String, Integer> symptomsFrequency = AnalyticsCounter.countFrequency("Project02Eclipse/symptoms.txt");
+		List<String> symptomsList;
+		ReadSymptomDataFromFile symptomsReader = new ReadSymptomDataFromFile("Project02Eclipse/symptoms.txt");
+		symptomsList = symptomsReader.getSymptoms();
+
+
+		HashMap<String, Integer> symptomsFrequency = AnalyticsCounter.countFrequency(symptomsList);
 		TreeMap<String, Integer> sortedSymptoms = SortingSymptoms.sortSymptoms(symptomsFrequency);
 
-
-		System.out.println(Arrays.asList(symptomsFrequency));
 		SymptomsWriter symptomsWriter = new SymptomsWriter(sortedSymptoms);
-
 	}
 
-	public static HashMap<String, Integer> countFrequency(String filename) throws Exception {
-		// first get input
-		BufferedReader reader = new BufferedReader(new FileReader(filename));
-		String line;
 
-		int i = 0;
+	/**
+	 * @param symptoms
+	 * @return symptomsFrequency
+	 * @throws Exception
+	 * HashMap to store the frequencies of symptoms
+	 *
+	 */
+	public static HashMap<String, Integer> countFrequency(List<String> symptoms) throws Exception {
 
-		ArrayList<String> symptoms = new ArrayList<>();
-		/* On s'assure avec une hashmap que la clé est unique */
+		/* To make sure the key is unique  */
 		HashMap<String, Integer> symptomsFrequency = new HashMap<>();
 
-
-		while ((line = reader.readLine()) != null) {
-			boolean symptomsExists = symptomsFrequency.containsKey(line);
-			System.out.println(symptomsExists);
+		/* incrementing numbers of symptoms in the HashMap */
+		for (int i = 0 ; i < symptoms.size() ; i++) {
+			boolean symptomsExists = symptomsFrequency.containsKey(symptoms.get(i));
 			if (symptomsExists) {
-				int nbOccurrence = symptomsFrequency.get(line);
+				int nbOccurrence = symptomsFrequency.get(symptoms.get(i));
 				nbOccurrence = nbOccurrence + 1;
-				symptomsFrequency.put(line, nbOccurrence);
+				symptomsFrequency.put(symptoms.get(i), nbOccurrence);
 			} else {
-				symptomsFrequency.put(line, 1);
+				symptomsFrequency.put(symptoms.get(i), 1);
 			}
 		}
-
-
-//		for (HashMap.Entry<String, Integer> entry : symptomsFrequency.entrySet()) {
-//			ResultWriter symptomsWriter = new ResultWriter(symptomsFrequency);
-//			symptomsWriter. ;
-
 		return symptomsFrequency;
 	}
 }
-
-
-		// 		pourchaque ($lignes as $ligne) {
-//  	si ($sortie[$ligne] existe pas donc $sortie[$ligne] = 1
-//  	sinon $sortie[$ligne]++;
-
-
-//			int headCount = 0;
-//
-//		int rashCount = 0;
-//		int pupilCount = 0;
-//		int highPressureCount = 0;
-
-//		while (line != null) {
-//			i++;
-//			System.out.println("symptom from file: " + line);
-
-
-		// next generate output
 
 
 

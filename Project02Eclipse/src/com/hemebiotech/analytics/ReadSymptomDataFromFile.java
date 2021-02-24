@@ -13,35 +13,37 @@ import java.util.List;
 public class ReadSymptomDataFromFile implements ISymptomReader {
 
 	private String filepath;
-	
+
 	/**
-	 * 
-	 * @param filepath a full or partial path to file with symptom strings in it, one per line
+	 *
+	 * @param filepath
+	 * Put data from file into List symptomsList
+	 *
 	 */
 	public ReadSymptomDataFromFile (String filepath) {
 		this.filepath = filepath;
 	}
-	
+
+	/**
+	 *
+	 * @return result into the List getSymptoms
+	 * Create ArrayList symptoms which will be convert into Map in the main
+	 */
 	@Override
-	public List<String> GetSymptoms() {
-		ArrayList<String> result = new ArrayList<String>();
-		
-		if (filepath != null) {
-			try {
-				BufferedReader reader = new BufferedReader (new FileReader(filepath));
-				String line = reader.readLine();
-				
-				while (line != null) {
-					result.add(line);
-					line = reader.readLine();
-				}
-				reader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+	public List<String> getSymptoms() {
+		List<String> result = null;
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(filepath));
+			String line;
+			ArrayList<String> symptoms = new ArrayList<>();
+
+			while ((line = reader.readLine()) != null) {
+				symptoms.add(line);
 			}
+			result = symptoms;
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		
 		return result;
 	}
-
 }

@@ -1,12 +1,21 @@
 package com.hemebiotech.analytics;
 
 
-import java.io.*;
-import java.util.HashMap;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Map;
 
 
 public class SymptomsWriter {
+
+    /**
+     *
+     * @param symptoms
+     * Write in file result.out from Map symptoms with a BufferedWriter
+     * Associating key and value from countFrequency and getSymptoms
+     */
 
     public SymptomsWriter (Map<String, Integer> symptoms) {
         File file = new File("result.out");
